@@ -8,8 +8,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MovementType;
 import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.ai.control.AquaticLookControl;
 import net.minecraft.entity.ai.control.AquaticMoveControl;
+import net.minecraft.entity.ai.control.YawAdjustingLookControl;
 import net.minecraft.entity.ai.goal.ChaseBoatGoal;
 import net.minecraft.entity.ai.goal.LookAroundGoal;
 import net.minecraft.entity.ai.goal.LookAtEntityGoal;
@@ -73,21 +73,22 @@ public class BasiliskEntity extends WaterCreatureEntity implements Monster {
             System.out.print("" + i);
         }
         this.moveControl = new AquaticMoveControl(this, 85, 10, 0.02F, 0.1F, true);
-        this.lookControl = new AquaticLookControl(this, 10);
+        this.lookControl = new YawAdjustingLookControl(this, 10);
+
     }
 
     public static DefaultAttributeContainer.Builder createBasiliskAttributes() {
         return MobEntity.createMobAttributes().add(EntityAttributes.GENERIC_MAX_HEALTH, 10.0D).add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 1.2D).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 3.0D);
     }
 
-    public static boolean canSpawn(EntityType<BasiliskEntity> type, WorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random) {
-        if (pos.getY() > 45 && pos.getY() < world.getSeaLevel()) {
-            Optional<RegistryKey<Biome>> optional = world.getBiomeKey(pos);
-            return (!Objects.equals(optional, Optional.of(BiomeKeys.OCEAN)) || !Objects.equals(optional, Optional.of(BiomeKeys.DEEP_OCEAN))) && world.getFluidState(pos).isIn(FluidTags.WATER);
-        } else {
-            return false;
-        }
-    }
+    // public static boolean canSpawn(EntityType<BasiliskEntity> type, WorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random) {
+    // if (pos.getY() > 45 && pos.getY() < world.getSeaLevel()) {
+    // Optional<RegistryKey<Biome>> optional = world.getBiomeKey(pos);
+    // return (!Objects.equals(optional, Optional.of(BiomeKeys.OCEAN)) || !Objects.equals(optional, Optional.of(BiomeKeys.DEEP_OCEAN))) && world.getFluidState(pos).isIn(FluidTags.WATER);
+    // } else {
+    // return false;
+    // }
+    // }
 
     @Override
     protected void initGoals() {
@@ -194,15 +195,6 @@ public class BasiliskEntity extends WaterCreatureEntity implements Monster {
     // dimensions) {
     // return 0.3F;
     // }
-    @Override
-    public int getLookPitchSpeed() {
-        return 1;
-    }
-
-    @Override
-    public int getBodyYawSpeed() {
-        return 1;
-    }
 
     @Override
     protected boolean shouldDropXp() {
