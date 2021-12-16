@@ -1,0 +1,9 @@
+{
+    "entity.seaz.basilisk": "Basilisk",
+    "entity.seaz.basilisk_part": "Basilisk",
+    "item.seaz.spawn_basilisk": "Basilisk Spawn Egg",
+    "text.autoconfig.seaz.title": "SeaZ Config",
+    "text.autoconfig.seaz.category.spawn_setting": "Spawn Settings",
+    "text.autoconfig.seaz.category.misc": "Misc Settings",
+    "text.autoconfig.seaz.option.necromancer_spawn_weight": "Necromancer Spawn Weight"
+}
