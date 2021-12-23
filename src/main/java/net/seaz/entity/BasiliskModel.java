@@ -12,7 +12,11 @@ import net.minecraft.client.model.ModelPartData;
 import net.minecraft.client.model.ModelTransform;
 import net.minecraft.client.model.TexturedModelData;
 import net.minecraft.client.render.entity.model.CompositeEntityModel;
+import net.minecraft.client.render.entity.model.CowEntityModel;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
+import net.seaz.SeazMain;
 
 @Environment(EnvType.CLIENT)
 public class BasiliskModel<T extends BasiliskEntity> extends CompositeEntityModel<T> {
@@ -77,6 +81,8 @@ public class BasiliskModel<T extends BasiliskEntity> extends CompositeEntityMode
     private final ModelPart headcrestL;
     private final ModelPart headcrestM;
 
+    private final ModelPart[] parts;
+
     public BasiliskModel(ModelPart root) {
         this.originhead = root.getChild("originhead");
         this.headcrestM = this.originhead.getChild("headcrestM");
@@ -138,6 +144,9 @@ public class BasiliskModel<T extends BasiliskEntity> extends CompositeEntityMode
         this.eyeflameR1 = this.headR.getChild("eyeflameR1");
         this.headRglow = this.headR.getChild("headRglow");
         this.headteethR = this.headR.getChild("headteethR");
+
+        this.parts = new ModelPart[] { this.body1, this.body2, this.body3, this.body4, this.body5, this.body6, this.body7, this.body8, this.body9, this.body10, this.body11, this.body12, this.body13,
+                this.body14, this.body15 };
     }
 
     public static TexturedModelData getTexturedModelData() {
@@ -264,6 +273,12 @@ public class BasiliskModel<T extends BasiliskEntity> extends CompositeEntityMode
         this.headcrestL.yaw = -0.2269F;
         this.headcrestL.roll = 0.2793F;
         this.headcrestM.pitch = 0.3491F;
+        // this.originhead.yaw = headYaw;
+        this.originhead.pitch = headPitch * ((float) Math.PI / 180);
+        this.originhead.yaw = headYaw * ((float) Math.PI / 180);
+        // System.out.println(this.originhead.yaw);
+        moveSegments(entity, animationProgress);
+        // System.out.println(limbAngle+"::"+limbDistance);
         // this.amethyst2.pitch = -0.1745F;
         // this.amethyst2.yaw = 0.1745F;
         // this.amethyst2_r1.yaw = 0.3927F;
@@ -308,6 +323,128 @@ public class BasiliskModel<T extends BasiliskEntity> extends CompositeEntityMode
         // amethyst3.visible = false;
         // amethyst4.visible = false;
         // }
+    }
+
+    @Override
+    public void animateModel(T entity, float f, float g, float h) {
+        super.animateModel(entity, f, g, h);
+
+        float x = MathHelper.lerpAngleDegrees(h, ((BasiliskEntity) entity).getBodyParts()[2].prevYaw, ((BasiliskEntity) entity).getBodyParts()[2].getYaw());
+        // float y = MathHelper.lerpAngleDegrees(g, ((BasiliskEntity) entity).getBodyParts()[2].prevHeadYaw, ((BasiliskEntity) entity).getBodyParts()[2].headYaw);
+        // float k = y - x;
+        // System.out
+        // .println("Animate: " + x + "::" + ((BasiliskEntity) entity).getBodyParts()[2].prevYaw + "::" + ((BasiliskEntity) entity).getBodyParts()[2].getYaw() + "::" + f + "::" + g + "::" + h);
+        // System.out.println(lerpAngleDegreesXX(((BasiliskEntity) entity).getBodyParts()[0].prevYaw, ((BasiliskEntity) entity).getBodyParts()[0].getYaw()) + "::"
+        // + lerpAngleDegreesXX(((BasiliskEntity) entity).getBodyParts()[2].prevYaw, ((BasiliskEntity) entity).getBodyParts()[2].getYaw())
+        // + lerpAngleDegreesXX(((BasiliskEntity) entity).getBodyParts()[3].prevYaw, ((BasiliskEntity) entity).getBodyParts()[3].getYaw()));
+        System.out.println("Th: " + ((BasiliskEntity) entity).getBodyParts()[3].prevYaw + "::" + ((BasiliskEntity) entity).getBodyParts()[3].getYaw());
+        System.out.println("Oo: " + ((BasiliskEntity) entity).getBodyParts()[10].prevYaw + "::" + ((BasiliskEntity) entity).getBodyParts()[10].getYaw());
+        for (int i = 0; i < this.parts.length; i++) {
+            // float u = MathHelper.lerpAngleDegrees(h, ((BasiliskEntity) entity).getBodyParts()[2].prevYaw, ((BasiliskEntity) entity).getBodyParts()[2].getYaw());
+            float xx = lerpAngleDegreesXX(i == 0 ? entity.prevBodyYaw : ((BasiliskEntity) entity).getBodyParts()[i - 1].prevYaw, ((BasiliskEntity) entity).getBodyParts()[i].getYaw());
+            // float xx = lerpAngleDegreesXX(((BasiliskEntity) entity).getBodyParts()[i].prevYaw,
+            // ((BasiliskEntity) entity).getBodyParts()[i].getYaw());
+            this.parts[i].yaw = xx;// i == 0 ? this.parts[i].yaw - xx : this.parts[i - 1].yaw - xx;
+            // if (i == 0)// || i == 13
+            // System.out.println(h);
+            // System.out.println(i + "::" + xx + "::" + ((BasiliskEntity) entity).getBodyParts()[i].prevYaw + "::" + ((BasiliskEntity) entity).getBodyParts()[i].getYaw() + "::" + h);
+            // MathHelper.wrapDegrees();
+        }
+    }
+
+    private static float lerpAngleDegreesXX(float start, float end) {
+        // return -MathHelper.clamp(MathHelper.wrapDegrees(end - start) * ((float) Math.PI / 180), -3.14F, 3.14F);
+        return -MathHelper.clamp(MathHelper.wrapDegrees(end - start) * ((float) Math.PI / 180), -6.28F, 6.28F);
+    }
+
+    private void moveSegments(Entity entity, float animationProgress) {
+        // System.out.println(this.originhead.yaw*(180F/(float) Math.PI));
+        // System.out.println(((BasiliskEntity) entity).bodyYaw + "::" + this.originhead.yaw + "::" + ((BasiliskEntity) entity).getBodyParts()[2].getYaw() + "::"
+        // + ((BasiliskEntity) entity).getBodyParts()[2].bodyYaw);
+
+        // float livingEntity2 = MathHelper.lerp(g, ((LivingEntity)livingEntity).prevPitch, ((Entity)livingEntity).getPitch());
+
+        for (int i = 0; i < this.parts.length; i++) {
+            // this.parts[i].tick();
+            // i == 0 ? this :
+            ModelPart leader = i == 0 ? this.originhead : this.parts[i - 1];
+
+            double followX = leader.pivotX;
+            double followY = leader.pivotY;
+            double followZ = leader.pivotZ;
+
+            Entity otherTest = i == 0 ? entity : ((BasiliskPartEntity) ((BasiliskEntity) entity).getBodyParts()[i - 1]);
+            // double followX = leader.getX();
+            // double followY = leader.getY();
+            // double followZ = leader.getZ();
+
+            // also weight the position so that the segments straighten out a little bit, and the front ones straighten more
+            // float angle = (((leader.getYaw() + 180) * 3.141593F) / 180F);
+            float angle = leader.yaw * 180F / (float) Math.PI; // (((leader.yaw + 180) * 3.141593F) / 180F);
+            // double straightenForce = 0.05D + (1.0 / (i + 1)) * 0.5D;
+            double straightenForce = 0.05D + (1.0 / (i + 1)) * 0.5D * 0.33D;
+            straightenForce = straightenForce * SeazMain.CONFIG.test3;
+
+            double idealX = -MathHelper.sin(angle) * straightenForce;
+            double idealZ = MathHelper.cos(angle) * straightenForce;
+            // double idealX = -angle * straightenForce;
+            // double idealZ = angle * straightenForce;
+            float test = angle * (float) straightenForce * (float) Math.PI / 180F;
+            // MathHelper.angleBetween(first, second)
+
+            // ((Entity)mobEntity).setYaw(MathHelper.clampAngle(((Entity)mobEntity).getYaw(), ((MobEntity)mobEntity).headYaw, 0.0f));
+            // this.parts[i].yaw = MathHelper.lerp(animationProgress, this.parts[i].yaw, leader.yaw);
+            // this.parts[i].yaw =entity.getYaw() / (float) Math.PI;//; / 180F;
+            double teststraightenForce = 0.05D + (1.0 / (14 - i)) * 0.5D * 0.33D;
+            // this.parts[i].yaw = MathHelper.clampedLerp(this.parts[i].yaw, leader.yaw, (float) teststraightenForce);
+            // this.parts[i].yaw = MathHelper.clampedLerp(this.parts[i].yaw, otherTest.getYaw(), (float) teststraightenForce * SeazMain.CONFIG.test3);
+
+            // this.parts[i].yaw = otherTest.getYaw();
+            // System.out.println(i+"::"+otherTest.getYaw()+"::"+leader.yaw);
+            // System.out.println(otherTest.prevYaw+"::"+otherTest.getHeadYaw()+"::"+otherTest.getYaw()+"::"+otherTest.getRotationVector().y);
+            // this.parts[i].yaw = this.parts[i].yaw +leader.yaw*(float)straightenForce;
+            // this.parts[i].yaw = MathHelper.clamp(animationProgress, this.parts[i].yaw, leader.yaw);
+            // this.parts[i].yaw = test - this.parts[i].yaw;
+            // this.parts[i].yaw = (float) Math.atan2(idealX, idealZ) * SeazMain.CONFIG.test4;
+            // System.out.println(i + ":::" + idealX + ":::" + idealZ + ":::" + leader.yaw + "::" + animationProgress);
+            // System.out.println(i + ":::" + (float) (Math.atan2(idealX, idealZ) * 180.0D / Math.PI) + "::" + Math.atan2(idealX, idealZ)+":::"+(float) (Math.atan2(idealX, idealZ) * 180.0D / Math.PI)
+            // + 90.0F)*(float) Math.PI/180F));
+
+            Vec3d diff = new Vec3d(parts[i].pivotX - followX, parts[i].pivotY - followY, parts[i].pivotZ - followZ);
+            // Vec3d diff = new Vec3d(parts[i].pivotX - followX, parts[i].pivotY - followY, parts[i].pivotZ - followZ);
+            // diff = diff.normalize();
+
+            // weight so segments drift towards their ideal position
+            diff = diff.add(idealX, 0, idealZ).normalize();
+            // System.out.println(diff+"::::::::::::+"+diff.normalize());
+            float f = 2.0F * SeazMain.CONFIG.test2;
+
+            float destX = (float) (followX + f * diff.x);
+            float destY = (float) (followY + f * diff.y);
+            float destZ = (float) (followZ + f * diff.z);
+            // float destX = (float) ( f * diff.x);
+            // float destY = (float) ( f * diff.y);
+            // float destZ = (float) ( f * diff.z);
+            // parts[i].setPivot(destX, destY, destZ);
+            // parts[i].setPivot(destX, destY, destZ);
+
+            double distance = MathHelper.sqrt((float) (diff.x * diff.x + diff.z * diff.z));
+
+            // if (i == 0) {
+            // // tilt segment next to head up towards head
+            // diff = diff.add(0, -0.15, 0);
+            // }
+            // this.parts[i].yaw = (float) (Math.atan2(diff.z, diff.x)) ;
+            /// this.parts[i].yaw = i * SeazMain.CONFIG.test4;
+            // System.out.println((float) (Math.atan2(diff.z, diff.x) * 180.0D / Math.PI) );
+            // this.parts[i].yaw =((float) (Math.atan2(diff.z, diff.x) * 180.0D / Math.PI) + 90.0F)*(180F/(float) Math.PI);
+            // , -(float) (Math.atan2(diff.y, distance) * 180.0D / Math.PI)
+            // parts[i].setYaw((float) (Math.atan2(diff.z, diff.x) * 180.0D / Math.PI) + 90.0F);
+
+            // this.parts[i].yaw =( (float) (Math.atan2(diff.z, diff.x) * 180.0D / Math.PI) + 90.0F)*(float) Math.PI/180F;
+            // System.out.println(i + "__" + this.parts[i].yaw);
+            // this.parts[i].setPivot(x, y, z);
+        }
     }
 
 }

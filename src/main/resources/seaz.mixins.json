@@ -3,8 +3,14 @@
   "minVersion": "0.8",
   "package": "net.seaz.mixin",
   "compatibilityLevel": "JAVA_16",
-  "mixins": [],
-  "client": [],
+  "mixins": [
+    "ServerWorldMixin",
+    "EntityTrackerEntryMixin"
+  ],
+  "client": [
+    "EntityRenderDispatcherMixin",
+    "LivingEntityRendererMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   }

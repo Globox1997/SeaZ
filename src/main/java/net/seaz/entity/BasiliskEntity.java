@@ -40,37 +40,39 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeKeys;
+import net.seaz.SeazMain;
 
 public class BasiliskEntity extends WaterCreatureEntity implements Monster {
 
     private final BasiliskPartEntity[] parts;
-    public final BasiliskPartEntity head = new BasiliskPartEntity(this, "head", 1.0F, 1.0F);
 
+    public final BasiliskPartEntity body = new BasiliskPartEntity(this, "body", 3.0F, 3.0F);
     private final BasiliskPartEntity body1 = new BasiliskPartEntity(this, "body1", 3.0F, 3.0F);
     private final BasiliskPartEntity body2 = new BasiliskPartEntity(this, "body2", 3.0F, 3.0F);
     private final BasiliskPartEntity body3 = new BasiliskPartEntity(this, "body3", 3.0F, 3.0F);
-    // private final BasiliskPartEntity body4 = new BasiliskPartEntity(this, "body4", 3.0F, 3.0F);
-    // private final BasiliskPartEntity body5 = new BasiliskPartEntity(this, "body5", 3.0F, 3.0F);
-    // private final BasiliskPartEntity body6 = new BasiliskPartEntity(this, "body6", 3.0F, 3.0F);
-    // private final BasiliskPartEntity body7 = new BasiliskPartEntity(this, "body7", 3.0F, 3.0F);
-    // private final BasiliskPartEntity body8 = new BasiliskPartEntity(this, "body8", 3.0F, 3.0F);
-    // private final BasiliskPartEntity body9 = new BasiliskPartEntity(this, "body9", 3.0F, 3.0F);
-    // private final BasiliskPartEntity body10 = new BasiliskPartEntity(this, "body10", 3.0F, 3.0F);
-    // private final BasiliskPartEntity body11 = new BasiliskPartEntity(this, "body11", 3.0F, 3.0F);
-    // private final BasiliskPartEntity body12 = new BasiliskPartEntity(this, "body12", 3.0F, 3.0F);
-    // private final BasiliskPartEntity body13 = new BasiliskPartEntity(this, "body13", 3.0F, 3.0F);
-    // private final BasiliskPartEntity body14 = new BasiliskPartEntity(this, "body14", 3.0F, 3.0F);
-    // private final BasiliskPartEntity body15 = new BasiliskPartEntity(this, "body15", 3.0F, 3.0F);
+    private final BasiliskPartEntity body4 = new BasiliskPartEntity(this, "body4", 3.0F, 3.0F);
+    private final BasiliskPartEntity body5 = new BasiliskPartEntity(this, "body5", 3.0F, 3.0F);
+    private final BasiliskPartEntity body6 = new BasiliskPartEntity(this, "body6", 3.0F, 3.0F);
+    private final BasiliskPartEntity body7 = new BasiliskPartEntity(this, "body7", 3.0F, 3.0F);
+    private final BasiliskPartEntity body8 = new BasiliskPartEntity(this, "body8", 3.0F, 3.0F);
+    private final BasiliskPartEntity body9 = new BasiliskPartEntity(this, "body9", 3.0F, 3.0F);
+    private final BasiliskPartEntity body10 = new BasiliskPartEntity(this, "body10", 3.0F, 3.0F);
+    private final BasiliskPartEntity body11 = new BasiliskPartEntity(this, "body11", 3.0F, 3.0F);
+    private final BasiliskPartEntity body12 = new BasiliskPartEntity(this, "body12", 3.0F, 3.0F);
+    private final BasiliskPartEntity body13 = new BasiliskPartEntity(this, "body13", 3.0F, 3.0F);
+    private final BasiliskPartEntity body14 = new BasiliskPartEntity(this, "body14", 3.0F, 3.0F);
+    private final BasiliskPartEntity body15 = new BasiliskPartEntity(this, "body15", 3.0F, 3.0F);
 
     public BasiliskEntity(EntityType<? extends WaterCreatureEntity> entityType, World world) {
         super(entityType, world);
-        this.parts = new BasiliskPartEntity[] { this.head, this.body1, this.body2, this.body3 };
+        this.parts = new BasiliskPartEntity[] { this.body, this.body1, this.body2, this.body3, this.body4, this.body5, this.body6, this.body7, this.body8, this.body9, this.body10, this.body11,
+                this.body12, this.body13, this.body14, this.body15 };
 
         System.out.println("Initialize Basilisk and Parts");
 
         for (int i = 0; i < this.parts.length; i++) {
             this.world.spawnEntity(this.parts[i]);
-            System.out.print("" + i);
+            // System.out.print("" + i);
         }
         this.moveControl = new AquaticMoveControl(this, 85, 10, 0.02F, 0.1F, true);
         this.lookControl = new YawAdjustingLookControl(this, 10);
@@ -97,7 +99,7 @@ public class BasiliskEntity extends WaterCreatureEntity implements Monster {
         // // this.goalSelector.add(1, new DolphinEntity.LeadToNearbyTreasureGoal(this));
         // // this.goalSelector.add(2, new DolphinEntity.SwimWithPlayerGoal(this, 4.0D));
         // this.goalSelector.add(4, new SwimAroundGoal(this, 1.0D, 10));
-        // this.goalSelector.add(4, new LookAroundGoal(this));
+        this.goalSelector.add(4, new LookAroundGoal(this));
         // // this.goalSelector.add(5, new LookAtEntityGoal(this, PlayerEntity.class,
         // // 6.0F));
         // // this.goalSelector.add(5, new DolphinJumpGoal(this, 10));
@@ -227,23 +229,89 @@ public class BasiliskEntity extends WaterCreatureEntity implements Monster {
             vec3ds[x] = new Vec3d(this.parts[x].getX(), this.parts[x].getY(), this.parts[x].getZ());
         }
 
-        float ab = this.getYaw() * 0.017453292F;
+        // float ab = this.getYaw() * 0.017453292F;
+        float ab = this.prevBodyYaw * 0.017453292F;
         float ac = MathHelper.sin(ab);
         float ad = MathHelper.cos(ab);
-        this.movePart(this.body1, (double) (ac * 0.5F), 0.0D, (double) (-ad * 0.5F));
+        // this.parts[0].setYaw(this.prevBodyYaw);
+        // System.out.print(this.bodyYaw + ":::::");
+        // System.out.println(ab + "::::::::" + ac + "::::::::" + ad);
+        // this.movePart(this.body1, (double) (ac * 0.5F), 0.0D, (double) (-ad * 0.5F));
 
-        for (int ah = 0; ah < this.parts.length; ++ah) {
-            this.parts[ah].prevX = vec3ds[ah].x;
-            this.parts[ah].prevY = vec3ds[ah].y;
-            this.parts[ah].prevZ = vec3ds[ah].z;
-            this.parts[ah].lastRenderX = vec3ds[ah].x;
-            this.parts[ah].lastRenderY = vec3ds[ah].y;
-            this.parts[ah].lastRenderZ = vec3ds[ah].z;
-        }
+        // this.movePart(this.parts[0], ac * 0.5F * SeazMain.CONFIG.test, 0.0D, -ad * 0.5F * SeazMain.CONFIG.test, true);
+        // for (int ah = 0; ah < this.parts.length; ++ah) {
+        // for (int ah = 1; ah < this.parts.length; ++ah) {
+        // // System.out.print((double) (ac * 0.5F) * ah * SeazMain.CONFIG.test + "::::");
+
+        // // this.movePart(this.parts[ah], (double) (ac * 0.5F) * ah * SeazMain.CONFIG.test + ac * 0.5F * SeazMain.CONFIG.test, 0.0D,
+        // // (double) (-ad * 0.5F) * ah * SeazMain.CONFIG.test - ad * 0.5F * SeazMain.CONFIG.test);
+
+        // this.movePart(this.parts[ah], this.parts[ah - 1].prevX, this.parts[ah - 1].prevY, this.parts[ah - 1].prevZ, false);
+        // this.parts[ah].prevX = vec3ds[ah].x;
+        // this.parts[ah].prevY = vec3ds[ah].y;
+        // this.parts[ah].prevZ = vec3ds[ah].z;
+        // this.parts[ah].lastRenderX = vec3ds[ah].x;
+        // this.parts[ah].lastRenderY = vec3ds[ah].y;
+        // this.parts[ah].lastRenderZ = vec3ds[ah].z;
+        // }
+        moveSegments();
+        // if (this.world.isClient)
+        // System.out.println("Entity: " + "::" + this.prevBodyYaw + "::" + this.parts[2].prevYaw + "::" + this.parts[2].getYaw() + "::");
+        // System.out.println("Entity: " + this.getYaw() + "::" + this.prevBodyYaw + "::" + this.bodyYaw + "::" + this.parts[2].prevYaw + "::" + this.parts[2].getYaw() + "::");
+
+        this.parts[0].setYaw(this.prevBodyYaw);
+        this.parts[0].setPosition(this.getX() + ac * 0.5F * SeazMain.CONFIG.test, this.prevY, this.getZ() + -ad * 0.5F * SeazMain.CONFIG.test);
+        // this.movePart(this.parts[0], ac * 0.5F * SeazMain.CONFIG.test, 0.0D, -ad * 0.5F * SeazMain.CONFIG.test, true);
     }
 
     private void movePart(BasiliskPartEntity basiliskPartEntity, double dx, double dy, double dz) {
+        // if (test)
         basiliskPartEntity.setPosition(this.getX() + dx, this.getY() + dy, this.getZ() + dz);
+        // else
+        // basiliskPartEntity.setPosition(dx, dy, dz);
+    }
+
+    private void moveSegments() {
+        for (int i = 1; i < this.parts.length; i++) {
+            // this.parts[i].tick();
+            // i == 0 ? this :
+            Entity leader = this.parts[i - 1];
+            double followX = leader.getX();
+            double followY = leader.getY();
+            double followZ = leader.getZ();
+
+            // also weight the position so that the segments straighten out a little bit, and the front ones straighten more
+            float angle = (((leader.prevYaw + 180) * 3.141593F) / 180F);
+
+            double straightenForce = 0.05D + (1.0 / (i + 1)) * 0.5D * SeazMain.CONFIG.test5;
+
+            double idealX = -MathHelper.sin(angle) * straightenForce;
+            double idealZ = MathHelper.cos(angle) * straightenForce;
+
+            Vec3d diff = new Vec3d(parts[i].getX() - followX, parts[i].getY() - followY, parts[i].getZ() - followZ);
+            diff = diff.normalize();
+
+            // weight so segments drift towards their ideal position
+            diff = diff.add(idealX, 0, idealZ).normalize();
+
+            double f = 2.0D;
+
+            double destX = followX + f * diff.x;
+            double destY = followY + f * diff.y;
+            double destZ = followZ + f * diff.z;
+
+            parts[i].setPos(destX, destY, destZ);
+
+            double distance = MathHelper.sqrt((float) (diff.x * diff.x + diff.z * diff.z));
+
+            if (i == 0) {
+                // tilt segment next to head up towards head
+                diff = diff.add(0, -0.15, 0);
+            }
+            // , -(float) (Math.atan2(diff.y, distance) * 180.0D / Math.PI)
+            parts[i].prevYaw = parts[i].getYaw();
+            parts[i].setYaw((float) (Math.atan2(diff.z, diff.x) * 180.0D / Math.PI) + 90.0F);
+        }
     }
 
     @Override
@@ -256,6 +324,7 @@ public class BasiliskEntity extends WaterCreatureEntity implements Monster {
 
         for (int i = 0; i < basiliskPartEntities.length; ++i) {
             basiliskPartEntities[i].setId(i + packet.getId());
+            System.out.println("READFROMPACKET???");
         }
 
     }

@@ -9,6 +9,12 @@ import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 @Config.Gui.Background("minecraft:textures/block/stone.png")
 public class SeaConfig implements ConfigData {
 
+    public float test = 6.0F;
+
+    public float test2 = 1.0F;
+    public float test3 = 1.0F;
+    public float test4 = 0.01F;
+    public float test5 = 1.5F;
     // @ConfigEntry.Category("spawn_setting")
     // @ConfigEntry.Gui.RequiresRestart
     // @ConfigEntry.BoundedDiscrete(min = 0, max = 100)

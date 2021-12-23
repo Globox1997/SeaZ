@@ -12,11 +12,13 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.world.World;
+import net.seaz.SeazMain;
 
 public class BasiliskPartEntity extends Entity {
     public final BasiliskEntity owner;
     public final String name;
     private final EntityDimensions partDimensions;
+    public float bodyYaw;
 
     public BasiliskPartEntity(EntityType<? extends Entity> entityType, World world) {
         super(entityType, world);
@@ -26,11 +28,22 @@ public class BasiliskPartEntity extends Entity {
     }
 
     public BasiliskPartEntity(BasiliskEntity owner, String name, float width, float height) {
-        super(owner.getType(), owner.world);
+        super(SeazMain.BASILISK_PART_ENTITY, owner.world);
         this.partDimensions = EntityDimensions.changing(width, height);
         this.calculateDimensions();
         this.owner = owner;
         this.name = name;
+    }
+
+    // @Override
+    // public void tick() {
+    // super.tick();
+    // System.out.println("X");
+    // }
+
+    @Override
+    public void setBodyYaw(float bodyYaw) {
+        this.bodyYaw = bodyYaw;
     }
 
     @Override
@@ -67,6 +80,7 @@ public class BasiliskPartEntity extends Entity {
     @Override
     public Packet<?> createSpawnPacket() {
         return new EntitySpawnS2CPacket(this);
+        // throw new UnsupportedOperationException();
     }
 
     @Override
@@ -81,13 +95,14 @@ public class BasiliskPartEntity extends Entity {
 
     @Override
     public boolean shouldRender(double distance) {
-        System.out.println("?X");
+        // System.out.println("?X");
         return super.shouldRender(distance);
     }
 
     @Override
     public boolean shouldRender(double cameraX, double cameraY, double cameraZ) {
-        System.out.println("?");
+        // System.out.println("?");
+        // return true;
         return super.shouldRender(cameraX, cameraY, cameraZ);
     }
 
